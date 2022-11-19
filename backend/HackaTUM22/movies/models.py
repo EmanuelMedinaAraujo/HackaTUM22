@@ -2,19 +2,19 @@ from django.db import models
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, primary_key=True)
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, primary_key=True)
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, primary_key=True)
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, primary_key=True)
 
 
 class Series(models.Model):

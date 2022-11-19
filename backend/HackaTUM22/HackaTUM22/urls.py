@@ -21,5 +21,5 @@ import movies.urls as movies_urls
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path('api/', include('rest_framework.urls')),
-    path('movies/', include(movies_urls)),
+    path('', include(movies_urls)),
 ]
