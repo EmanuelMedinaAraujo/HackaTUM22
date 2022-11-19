@@ -20,7 +20,7 @@ class RecommendationAlgorithm():
             return validMovies[0]
         validMovies.remove(fixedFilter.currentMovie)
         # TODO Determine the best recommendation
-        return validMovies
+        return validMovies[0]
 
     # Query the database using the fixed filter
     @staticmethod
