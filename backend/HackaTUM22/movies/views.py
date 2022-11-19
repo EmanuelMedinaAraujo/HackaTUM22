@@ -292,7 +292,9 @@ class FirstAPIView(APIView):
     def post(self, request, *args, **kwargs):
         config = request.data.get('config')
         filter = FixedFilter(config['genres'], config['showOnlySerie'], config['providers'], config['price'])
-        return RecommendationAlgorithm.getFirstSuggestions(filter)
+        serializer1 = MovieSerializer(RecommendationAlgorithm.getFirstSuggestions(filter)[0])
+        serializer2 = MovieSerializer(RecommendationAlgorithm.getFirstSuggestions(filter)[1])
+        return Response([serializer1.data, serializer2.data], status=status.HTTP_200_OK)
 
 
 class NextAPIView(APIView):
@@ -300,4 +302,5 @@ class NextAPIView(APIView):
         config = request.data.get('config')
         filter = FixedFilter(config['genres'], config['showOnlySerie'], config['providers'], config['price'])
         swiped = request.data.get('swipedMovies')
-        return RecommendationAlgorithm.getNextSuggestion(filter, swiped)
+        serializer = MovieSerializer(RecommendationAlgorithm.getNextSuggestion(filter, swiped))
+        return Response(serializer.data, status=status.HTTP_200_OK)
