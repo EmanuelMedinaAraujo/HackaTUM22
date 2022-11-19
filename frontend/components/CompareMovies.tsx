@@ -20,7 +20,7 @@ export default function CompareMovies() {
                     title: "1000 Dinge",
                     year: 1994,
                     genre: "Drama",
-                    thumbnail: "https://images-ext-2.discordapp.net/external/F6MO7PqDtwnMTojW2FW22-F6_qcet6FsFxsWOVGuJTs/https/www.vodster.de/db/w500/5tJQB1c9AzsQoOy3WW5NQcJCQ9X.jpg",
+                    thumbnail: "https://www.streampicker.de/files/images/202209/0/100-dinge,971428_poster_200.jpg",
                     description: "Paul (Florian David Fitz) hat eine neue App entwickelt, die jedem Smartphone eine lernfähige Stimme verleiht. NANA ist in der Lage, jeden Nutzer auf emotionale und humorvolle Weise anzusprechen. Während Paul vor allem das Glück seiner potenziellen Kunden im Auge hat, hofft sein Partner Toni (Matthias Schweighöfer) auf das schnelle Geld. Er hat Pauls Handy so manipuliert, dass NANA seine ausgeprägte Kaufsucht noch verschlimmert. Nachdem die beiden ihre Erfindung an einen US-Internetmilliardär verkauft haben, kommt es zum Streit: Paul will sich nicht länger als Konsumschlampe beschimpfen lassen und lässt sich auf eine fatale Wette "
                 }} />
             </div>
@@ -30,7 +30,7 @@ export default function CompareMovies() {
                     title: "1000 Dinge",
                     year: 1994,
                     genre: "Drama",
-                    thumbnail: "https://images-ext-2.discordapp.net/external/F6MO7PqDtwnMTojW2FW22-F6_qcet6FsFxsWOVGuJTs/https/www.vodster.de/db/w500/5tJQB1c9AzsQoOy3WW5NQcJCQ9X.jpg",
+                    thumbnail: "https://www.streampicker.de/files/images/202211/0/spirited,1000717_poster_200.jpg",
                     description: "Paul (Florian David Fitz) hat eine neue App entwickelt, die jedem Smartphone eine lernfähige Stimme verleiht. NANA ist in der Lage, jeden Nutzer auf emotionale und humorvolle Weise anzusprechen. Während Paul vor allem das Glück seiner potenziellen Kunden im Auge hat, hofft sein Partner Toni (Matthias Schweighöfer) auf das schnelle Geld. Er hat Pauls Handy so manipuliert, dass NANA seine ausgeprägte Kaufsucht noch verschlimmert. Nachdem die beiden ihre Erfindung an einen US-Internetmilliardär verkauft haben, kommt es zum Streit: Paul will sich nicht länger als Konsumschlampe beschimpfen lassen und lässt sich auf eine fatale Wette "
                 }} />
             </div>
