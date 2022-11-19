@@ -7,8 +7,16 @@ import { Filters, defaultFilters } from '../../models/filters';
 //Interfaces
 
 export enum CurrentPage {
-    FILTERS,
-    MOVIES,
+  START,
+  FILTERS,
+  MOVIES,
+  RESULTS,
+}
+
+export enum DetailsModal {
+    NONE,
+    BOTTOM,
+    TOP
 }
 
 interface QuizState {
@@ -18,12 +26,13 @@ interface QuizState {
   currentMovies: [Movie | null, Movie | null];
   defaultFilters: Array<Filters>;
   progress: number;
+  detailsModal: DetailsModal;
 }
 
 //Inital State
 export const initialState: QuizState = {
   currentState: CurrentState.initial,
-  currentPage: CurrentPage.FILTERS,
+  currentPage: CurrentPage.START,
   quizeRequest: {
     config: {},
     movies: [],
@@ -31,14 +40,22 @@ export const initialState: QuizState = {
   },
   currentMovies: [null, null],
   defaultFilters: defaultFilters,
-  progress: 0
+  progress: 0,
+  detailsModal: DetailsModal.NONE
 }
 
 //Async Thunks
 export const getNextMovie = createAsyncThunk(
   'quiz/getNextMovie',
   async (_, thunkApi) => {
-
+    const state: QuizState = thunkApi.getState() as QuizState;
+    return await fetch('http://localhost:3000/api/quiz/next', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(state.quizeRequest),
+    })
   }
 )
 
@@ -60,6 +77,9 @@ export const quizeSlice = createSlice({
     },
     addFilter: (state, action) => {
       state.quizeRequest.config[action.payload.key] = action.payload.value;
+    },
+    setDetailsModal: (state, action) => {
+      state.detailsModal = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -77,6 +97,6 @@ export const quizeSlice = createSlice({
   }
 })
 
-export const { reset, changePage, addFilter } = quizeSlice.actions
+export const { reset, changePage, addFilter, setDetailsModal } = quizeSlice.actions
 
 export default quizeSlice.reducer
