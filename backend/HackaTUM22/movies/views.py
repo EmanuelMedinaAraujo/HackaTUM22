@@ -1,7 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
+from .fixed_filter import FixedFilter
 from .models import Movie, Person, Genre, Country, Company
+from .recommendation_engine import RecommendationAlgorithm
 from .serializers import MovieSerializer, PersonSerializer, GenreSerializer, CountrySerializer, CompanySerializer
 from rest_framework import permissions
 
@@ -248,3 +251,53 @@ class CompanyDetailApiView(APIView):
 
         serializer = CompanySerializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class MovieApiView(APIView):
+    def post(self, request, *args, **kwargs):
+        '''
+        Create the movie with given data
+        '''
+        data = {
+            'tmdb': request.data.get('tmdb'),
+            'tvdb': request.data.get('tvdb'),
+            'imdb_id': request.data.get('imdb_id'),
+            'imdb_episode_id': request.data.get('imdb_episode_id'),
+            'title': request.data.get('title'),
+            'otitle': request.data.get('otitle'),
+            'original': request.data.get('original'),
+            'serie': request.data.get('serie'),
+            'episode': request.data.get('episode'),
+            'episodetitle': request.data.get('episodetitle'),
+            'year': request.data.get('year'),
+            # 'directors': request.data.get('directors'),
+            # 'actors': request.data.get('actors'),
+            # 'companies': request.data.get('companies'),
+            # 'genres': request.data.get('genres'),
+            # 'countries': request.data.get('countries'),
+            'banners': request.data.get('banners'),
+            'posters': request.data.get('posters'),
+            'runtime': request.data.get('runtime'),
+            'fsk': request.data.get('fsk')
+        }
+        serializer = MovieSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FirstAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        config = request.data.get('config')
+        filter = FixedFilter(config['genres'], config['showOnlySerie'], config['providers'], config['price'])
+        return RecommendationAlgorithm.getFirstSuggestions(filter)
+
+
+class NextAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        config = request.data.get('config')
+        filter = FixedFilter(config['genres'], config['showOnlySerie'], config['providers'], config['price'])
+        swiped = request.data.get('swipedMovies')
+        return RecommendationAlgorithm.getNextSuggestion(filter, swiped)

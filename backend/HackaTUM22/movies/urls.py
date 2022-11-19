@@ -2,7 +2,7 @@
 from django.urls import path, include
 from .views import (
     MovieDetailApiView, MovieApiView, PersonApiView, PersonDetailApiView, GenreApiView, GenreDetailApiView,
-    CountryApiView, CountryDetailApiView, CompanyApiView, CompanyDetailApiView,
+    CountryApiView, CountryDetailApiView, CompanyApiView, CompanyDetailApiView, NextAPIView, FirstAPIView,
 )
 
 urlpatterns = [
@@ -16,4 +16,7 @@ urlpatterns = [
     path('countries/api/<int:id>/', CountryDetailApiView.as_view()),
     path('companies/api', CompanyApiView.as_view()),
     path('companies/api/<int:id>/', CompanyDetailApiView.as_view()),
+    path('first/api', FirstAPIView.as_view()),
+    path('next/api', NextAPIView.as_view()),
+
 ]

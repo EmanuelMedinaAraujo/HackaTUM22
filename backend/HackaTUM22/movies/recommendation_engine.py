@@ -1,6 +1,7 @@
 from django.db.models import Count
 from movies.models import *
 import random
+import fixed_filter
 
 # Given a fixed filter and a list of movies determine the best next suggestion
 class RecommendationAlgorithm():
