@@ -16,6 +16,7 @@ class FixedFilter():
     # 'Pay or lend' only includes offers which do not require a subscription
     price = (True, False, False)
 
+    # The current visible Movie
     currentMovie = None
 
     # Constructor
