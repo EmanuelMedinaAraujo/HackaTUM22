@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import LandingPage from "../components/LandingPage"
 import MovieQuiz from "../components/MovieQuiz"
+import MovieResult from "../components/MovieResult"
 import { addFilter, changePage, CurrentPage } from "../state/slices/quizSlice"
 import { RootState } from "../state/store"
 
@@ -21,13 +23,23 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    dispatch(changePage(CurrentPage.RESULTS))
+  }, [])
+
   return (
     <div className="h-screen">
+      {currentPage === CurrentPage.START && 
+        <LandingPage/>
+      }
       {currentPage == CurrentPage.MOVIES &&
         <CompareMovies />
       }
       {currentPage == CurrentPage.FILTERS &&
         <MovieQuiz questions={currentFilters[currentFilterStep]} nextStep={nextStep}/>
+      }
+      {currentPage == CurrentPage.RESULTS &&
+       <MovieResult/>
       }
     </div>
   )

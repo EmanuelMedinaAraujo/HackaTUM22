@@ -7,8 +7,10 @@ import { Filters, defaultFilters } from '../../models/filters';
 //Interfaces
 
 export enum CurrentPage {
-    FILTERS,
-    MOVIES,
+  START,
+  FILTERS,
+  MOVIES,
+  RESULTS,
 }
 
 export enum DetailsModal {
@@ -30,7 +32,7 @@ interface QuizState {
 //Inital State
 export const initialState: QuizState = {
   currentState: CurrentState.initial,
-  currentPage: CurrentPage.FILTERS,
+  currentPage: CurrentPage.START,
   quizeRequest: {
     config: {},
     movies: [],
@@ -46,7 +48,14 @@ export const initialState: QuizState = {
 export const getNextMovie = createAsyncThunk(
   'quiz/getNextMovie',
   async (_, thunkApi) => {
-
+    const state: QuizState = thunkApi.getState() as QuizState;
+    return await fetch('http://localhost:3000/api/quiz/next', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(state.quizeRequest),
+    })
   }
 )
 
