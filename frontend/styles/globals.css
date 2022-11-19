@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    /* The card should */
+    .card {
+       
+        transform-style: preserve-3d;
+        transition: transform 1s;
+    }
+
+    /* Do an horizontal flip when you move the mouse over the flip box container */
+    .card.is-flipped {
+        transform: rotateY(180deg) translateY(200px);
+    }
+
+    .card.is-flipped-bottom {
+        transform: rotateY(180deg) translateY(-200px);
+    }
+    
+    .card-face {
+        
+    }
+  
+    .card-face-front {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        z-index: 20;
+    }
+  
+    /* Position in center of screen*/
+    .card-face-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        z-index: 50;
+        transform: rotateY(180deg);
+    }
+  
+}   

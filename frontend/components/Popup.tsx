@@ -9,7 +9,7 @@ interface Props {
 export default function Popup(props: Props) {
     const [showDetails, setShowDetails] = useState(false);
     return (
-        <div className="h-screen w-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 z-10">
+        <div className="h-screen w-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
             <div className="absolute bottom-0 left-0 w-full h-full bg-white p-2 px-4">
                 <div className="absolute top-0 right-0 m-4" onClick={props.closePopup}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
