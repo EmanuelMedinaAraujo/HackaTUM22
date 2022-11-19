@@ -11,6 +11,12 @@ export enum CurrentPage {
     MOVIES,
 }
 
+export enum DetailsModal {
+    NONE,
+    BOTTOM,
+    TOP
+}
+
 interface QuizState {
   currentState: CurrentState;
   currentPage: CurrentPage;
@@ -18,6 +24,7 @@ interface QuizState {
   currentMovies: [Movie | null, Movie | null];
   defaultFilters: Array<Filters>;
   progress: number;
+  detailsModal: DetailsModal;
 }
 
 //Inital State
@@ -31,7 +38,8 @@ export const initialState: QuizState = {
   },
   currentMovies: [null, null],
   defaultFilters: defaultFilters,
-  progress: 0
+  progress: 0,
+  detailsModal: DetailsModal.NONE
 }
 
 //Async Thunks
@@ -60,6 +68,9 @@ export const quizeSlice = createSlice({
     },
     addFilter: (state, action) => {
       state.quizeRequest.config[action.payload.key] = action.payload.value;
+    },
+    setDetailsModal: (state, action) => {
+      state.detailsModal = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -77,6 +88,6 @@ export const quizeSlice = createSlice({
   }
 })
 
-export const { reset, changePage, addFilter } = quizeSlice.actions
+export const { reset, changePage, addFilter, setDetailsModal } = quizeSlice.actions
 
 export default quizeSlice.reducer
