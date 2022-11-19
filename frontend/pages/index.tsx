@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux"
 import LandingPage from "../components/LandingPage"
 import MovieQuiz from "../components/MovieQuiz"
 import MovieResult from "../components/MovieResult"
-import { addFilter, changePage, CurrentPage } from "../state/slices/quizSlice"
-import { RootState } from "../state/store"
+import { addFilter, changePage, CurrentPage, getFirst } from "../state/slices/quizSlice"
+import { RootState, useAppDispatch } from "../state/store"
 
 const CompareMovies = dynamic(() => import("../components/CompareMovies"), { ssr: false })
 
@@ -13,7 +13,7 @@ export default function Home() {
   const currentPage = useSelector((state: RootState) => state.quizReducer.currentPage)
   const currentFilters = useSelector((state: RootState) => state.quizReducer.defaultFilters)
   const [currentFilterStep, setCurrentFilterStep] = useState(0)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const nextStep = () => {
     if (currentFilterStep < currentFilters.length - 1) {
@@ -24,7 +24,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    dispatch(changePage(CurrentPage.RESULTS))
+    dispatch(getFirst())
   }, [])
 
   return (

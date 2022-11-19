@@ -49,13 +49,32 @@ export const getNextMovie = createAsyncThunk(
   'quiz/getNextMovie',
   async (_, thunkApi) => {
     const state: QuizState = thunkApi.getState() as QuizState;
-    return await fetch('http://localhost:3000/api/quiz/next', {
+    return await fetch('http://localhost:8000/movies/api/10966612/', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        //Add no cors to avoid cors error
+        'mode': 'no-cors',
+        'Access-Control-Allow-Origin': '*'
+
+      },
+      body: JSON.stringify(state.quizeRequest),
+    })
+  }
+)
+
+//Async Thunks
+export const getFirst = createAsyncThunk(
+  'quiz/getFirst',
+  async (_, thunkApi) => {
+    const state: QuizState = thunkApi.getState() as QuizState;
+    return await fetch('http://localhost:8000/movies/api/10966612/', {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(state.quizeRequest),
-    })
+    }).then((res) => res.json())
   }
 )
 
@@ -83,7 +102,7 @@ export const quizeSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    //getCurrentUser
+    //getNextMovie
     builder.addCase(getNextMovie.pending, (state, action) => {
       state.currentState = CurrentState.loading
     })
@@ -91,6 +110,17 @@ export const quizeSlice = createSlice({
       state.currentState = CurrentState.fulfilled
     })
     builder.addCase(getNextMovie.rejected, (state, action) => {
+      state.currentState = CurrentState.error
+    })
+
+    builder.addCase(getFirst.pending, (state, action) => {
+      state.currentState = CurrentState.loading
+    })
+    builder.addCase(getFirst.fulfilled, (state, action) => {
+      state.currentState = CurrentState.fulfilled
+      console.log("Server Response ", action.payload)
+    })
+    builder.addCase(getFirst.rejected, (state, action) => {
       state.currentState = CurrentState.error
     })
 
