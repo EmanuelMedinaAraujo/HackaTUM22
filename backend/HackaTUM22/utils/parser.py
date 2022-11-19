@@ -23,6 +23,46 @@ def parse(source, target):
         data = json.load(dataf)
         newdata = []
         for i, block in enumerate(data):
+            directors = get_list(block['directors'])
+            if directors:
+                for director in directors:
+                    url = 'http://127.0.0.1:8000/persons/api'
+                    new = dict(name=director)
+                    # print(new)
+                    x = requests.post(url, json=new)
+
+            actors = get_list(block['actors'])
+            if actors:
+                for actor in actors:
+                    url = 'http://127.0.0.1:8000/persons/api'
+                    new = {}
+                    new['name'] = actor
+                    x = requests.post(url, json=new)
+
+            genres = get_list(block['genres'])
+            if genres:
+                for genre in genres:
+                    url = 'http://127.0.0.1:8000/genres/api'
+                    new = {}
+                    new['name'] = genre
+                    x = requests.post(url, json=new)
+
+            countries = get_list(block['countries'])
+            if countries:
+                for country in countries:
+                    url = 'http://127.0.0.1:8000/countries/api'
+                    new = {}
+                    new['name'] = country
+                    x = requests.post(url, json=new)
+
+            companies = get_list(block['companies'])
+            if companies:
+                for company in companies:
+                    url = 'http://127.0.0.1:8000/companies/api'
+                    new = {}
+                    new['name'] = company
+                    x = requests.post(url, json=new)
+
             new = dict(title=block['title'],
                        # internal_id=block['id'],
                        mdb=block['tmdb'],
@@ -35,11 +75,11 @@ def parse(source, target):
                        episodetitle=block['episodetitle'],
                        oepisodetitle=block['oepisodetitle'],
                        year=block['year'],
-                       # directors=get_list(block['directors']),
-                       # actors=get_list(block['actors']),
-                       # companies=get_list(block['companies']),
-                       # countries=get_list(block['countries']),
-                       # genres=get_list(block['genres']),
+                       directors=get_list(block['directors']),
+                       actors=get_list(block['actors']),
+                       companies=get_list(block['companies']),
+                       countries=get_list(block['countries']),
+                       genres=get_list(block['genres']),
                        airtime=block['airtime'],
                        banners=get_first(block['banners']),
                        posters=get_first(block['posters']),
@@ -47,7 +87,7 @@ def parse(source, target):
                        fsk=block['fsk']
                        )
 
-            print(new)
+            # print(new)
             url = 'http://127.0.0.1:8000/movies/api'
             x = requests.post(url, json=new)
 
