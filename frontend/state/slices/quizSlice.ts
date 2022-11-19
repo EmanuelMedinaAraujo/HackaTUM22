@@ -15,8 +15,9 @@ interface QuizState {
   currentState: CurrentState;
   currentPage: CurrentPage;
   quizeRequest: QuizRequest;
-  currentMovies: [Movie | null, Movie | null],
-  defaultFilters: Array<Filters>
+  currentMovies: [Movie | null, Movie | null];
+  defaultFilters: Array<Filters>;
+  progress: number;
 }
 
 //Inital State
@@ -30,6 +31,7 @@ export const initialState: QuizState = {
   },
   currentMovies: [null, null],
   defaultFilters: defaultFilters,
+  progress: 0
 }
 
 //Async Thunks

@@ -22,7 +22,7 @@ export default function Home() {
   }
 
   return (
-    <div className="" style={{maxHeight: "100vh"}}>
+    <div className="h-screen">
       {currentPage == CurrentPage.MOVIES &&
         <CompareMovies />
       }
