@@ -18,5 +18,4 @@ urlpatterns = [
     path('companies/api/<int:id>/', CompanyDetailApiView.as_view()),
     path('first/api', FirstAPIView.as_view()),
     path('next/api', NextAPIView.as_view()),
-
 ]

@@ -12,34 +12,32 @@ const CompareMovies = dynamic(() => import("../components/CompareMovies"), { ssr
 export default function Home() {
   const currentPage = useSelector((state: RootState) => state.quizReducer.currentPage)
   const currentFilters = useSelector((state: RootState) => state.quizReducer.defaultFilters)
+  const progress = useSelector((state: RootState) => state.quizReducer.progress)
   const [currentFilterStep, setCurrentFilterStep] = useState(0)
   const dispatch = useAppDispatch()
 
-  const nextStep = () => {
+  const nextStep = async () => {
     if (currentFilterStep < currentFilters.length - 1) {
       setCurrentFilterStep(currentFilterStep + 1)
     } else {
+      await dispatch(getFirst())
       dispatch(changePage(CurrentPage.MOVIES))
     }
   }
 
-  useEffect(() => {
-    dispatch(getFirst())
-  }, [])
-
   return (
     <div className="h-screen">
-      {currentPage === CurrentPage.START && 
-        <LandingPage/>
+      {currentPage === CurrentPage.START &&
+        <LandingPage />
       }
       {currentPage == CurrentPage.MOVIES &&
         <CompareMovies />
       }
       {currentPage == CurrentPage.FILTERS &&
-        <MovieQuiz questions={currentFilters[currentFilterStep]} nextStep={nextStep}/>
+        <MovieQuiz questions={currentFilters[currentFilterStep]} nextStep={nextStep} />
       }
       {currentPage == CurrentPage.RESULTS &&
-       <MovieResult/>
+        <MovieResult />
       }
     </div>
   )

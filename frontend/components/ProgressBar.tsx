@@ -7,7 +7,7 @@ export default function ProgressBar() {
     return (
         //A custom progress bar that shows the progress of the quiz
         <div className="bg-purple-200 relative h-5">
-            <div className=" bg-purple-800 absolute top-0 left-0 h-full" style={{ width: `${10}%` }}></div>
+            <div className=" bg-purple-800 absolute top-0 left-0 h-full" style={{ width: `${progress * 10}%` }}></div>
         </div>
     )
 }

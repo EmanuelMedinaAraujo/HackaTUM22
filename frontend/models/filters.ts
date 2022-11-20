@@ -1,33 +1,47 @@
 export interface Filters {
     lable: string;
-    options: Array<string>;
+    lableId: string;
+    options: Array<{lable: string, id: string}>;
     selected: boolean;
 }
 
 export const defaultFilters : Array<Filters> = [
     {
         lable: 'Genre',
-        options: ['Abenteuer', 'Action', 'Animation', 'Dokumentation', 'Drama', 'Erotik', 'Familie', 'Fantasy', 'Filmkunst', 'Horror', 'Kinder & Jugend', 'Komödie', 'Krimi', 'Musik', 'Mystery', 'Reality & TV', 'Romantik', 'Science-Fiction', 'Sonstige', 'Thriller', 'Western'],
+        lableId: 'genres',
+        options: [
+                {id:"Abenteu",lable: "Abenteuer"},
+                {id:"Action",lable:"Action"},
+                {id:"Animation",lable: "Animation"},
+                {id:"Dokumentation",lable:"Dokumentation"},
+                {id:"Drama",lable:"Drama"},
+                {id:"Erotik",lable:"Erotik"},
+                {id:"Familie",lable:"Familie"},
+                {id:"Fantasy",lable:"Fantasy"},
+                {id:"Filmkunst",lable:"Filmkunst"},
+                {id:"Horror",lable:"Horror"},
+                {id:"Kinder",lable:"Kinder & Jugend"},
+                {id:"Komödie",lable:"Komödie"},
+                {id:"Krimi",lable:"Krimi"},
+                {id:"Musik",lable:"Musik"},
+                {id:"Mystery",lable:"Mystery"},
+                {id:"Reality & TV",lable:"Reality & TV"},
+                {id:"Romantik",lable:"Romantik"},
+                {id:"Science-Fiction",lable:"Science-Fiction"},
+                {id:"Sonstige",lable:"Sonstige"},
+                {id:"Thriller",lable:"Thriller"},
+                {id:"Western",lable:"Western"}],
         selected: false
     },
     {
         lable: 'Anbieter',
-        options: ['Netflix', 'Amazon Prime Video', 'Disney+', 'Apple TV+', 'WOW', 'RTL+', 'Joyn', 'Joyn Plus', 'Freevee', 'discovery+', 'MagentaTV', 'Amazon Video', 'iTunes Store', 'Google Play', 'Maxdome'],
+        lableId: 'providers',
+        options: [
+            {id:"Netflix", lable:"Netflix"}, 
+            {id:"Apple", lable:"Apple"},
+            {id:"Disney", lable:"Disney"},
+            {id:"RTL+", lable:"RTL+"},
+        ],
         selected: false
     },
-    {
-        lable: 'Preis',
-        options: ["Im Abo", "Kaufen/Leihen", "Kostenlos"],
-        selected: false
-    },
-    {
-        lable: 'Type',
-        options: ['Film', 'Serie'],
-        selected: false
-    },
-    {
-        lable: 'age',
-        options: ['Ab 0', 'Ab 6', 'Ab 7', 'Ab 12', 'Ab 13', 'Ab 16', 'Ab 18'],
-        selected: false
-    }
 ]

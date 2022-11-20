@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { Filters } from "../models/filters"
 import { addFilter } from "../state/slices/quizSlice"
@@ -12,10 +12,13 @@ export default function MovieQuiz(props: Props) {
     const [selected, setSelected] = useState<Array<string>>([])
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        setSelected([])
+    }, [props.questions])
+
     const handleSelect = (data: string) => {
         //If already selected, remove from selected
         //If not selected, add to selected
-
         if (selected.includes(data)) {
             setSelected(selected.filter((item) => item !== data))
         }
@@ -25,7 +28,7 @@ export default function MovieQuiz(props: Props) {
     }
 
     const handleNext = () => {
-        dispatch(addFilter({ key: props.questions.lable, value: props.questions.options }))
+        dispatch(addFilter({key: props.questions.lableId, value: selected}))
         props.nextStep()
     }
 
@@ -36,9 +39,10 @@ export default function MovieQuiz(props: Props) {
                 {props.questions.options.map((data) => {
                     return (
                         <div
-                            className={`border rounded-box border-black cursor-pointer px-2 py-1 ${selected.includes(data) ? "bg-gray-200" : ""}`}
-                            onClick={() => handleSelect(data)}>
-                            <p className={`text-2xl ${selected.includes(data) ? "" : ""}`}>{data}</p>
+                            key={data.lable}
+                            className={`border rounded-box border-black cursor-pointer px-2 py-1 ${selected.includes(data.id) ? "bg-gray-200" : ""}`}
+                            onClick={() => handleSelect(data.id)}>
+                            <p className={`text-2xl ${selected.includes(data.id) ? "" : ""}`}>{data.id}</p>
                         </div>
                     )
                 })}

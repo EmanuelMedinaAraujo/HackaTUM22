@@ -1,4 +1,4 @@
-import models
+import movies.models
 
 # Fixed Filter determinded by the user
 class FixedFilter():

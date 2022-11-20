@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import { CurrentState } from '../enums'
 import { QuizRequest } from '../../models/quiz';
-import { Movie } from '../../models/movie';
+import { Movie, parseMovies, parseMovie } from '../../models/movie';
 import { Filters, defaultFilters } from '../../models/filters';
+import { RootState } from '../store';
 
 //Interfaces
 
@@ -14,9 +15,9 @@ export enum CurrentPage {
 }
 
 export enum DetailsModal {
-    NONE,
-    BOTTOM,
-    TOP
+  NONE,
+  BOTTOM,
+  TOP
 }
 
 interface QuizState {
@@ -34,7 +35,10 @@ export const initialState: QuizState = {
   currentState: CurrentState.initial,
   currentPage: CurrentPage.START,
   quizeRequest: {
-    config: {},
+    config: {
+      "showOnlySerie": false,
+      "price": ["15"],
+    },
     movies: [],
     currentMovieId: ''
   },
@@ -47,19 +51,19 @@ export const initialState: QuizState = {
 //Async Thunks
 export const getNextMovie = createAsyncThunk(
   'quiz/getNextMovie',
-  async (_, thunkApi) => {
-    const state: QuizState = thunkApi.getState() as QuizState;
-    return await fetch('http://localhost:8000/movies/api/10966612/', {
+  async (pastMovie: string, thunkApi) => {
+    const state: RootState = await thunkApi.getState() as RootState;
+    let quizeRequest = state.quizReducer.quizeRequest;
+    return await fetch('http://localhost:8000/next/api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        //Add no cors to avoid cors error
-        'mode': 'no-cors',
-        'Access-Control-Allow-Origin': '*'
-
       },
-      body: JSON.stringify(state.quizeRequest),
-    })
+      body: JSON.stringify({
+        ...quizeRequest,
+        movies: [...quizeRequest.movies, pastMovie]
+      })
+    }).then((res) => res.json()).then((data) => parseMovie(data))
   }
 )
 
@@ -67,14 +71,17 @@ export const getNextMovie = createAsyncThunk(
 export const getFirst = createAsyncThunk(
   'quiz/getFirst',
   async (_, thunkApi) => {
-    const state: QuizState = thunkApi.getState() as QuizState;
-    return await fetch('http://localhost:8000/movies/api/10966612/', {
-      method: 'GET',
+    const state: RootState = await thunkApi.getState() as RootState;
+    let quizeRequst = state.quizReducer.quizeRequest;
+    console.log(state)
+    console.log("State ", JSON.stringify(quizeRequst))
+    return await fetch('http://localhost:8000/first/api', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(state.quizeRequest),
-    }).then((res) => res.json())
+      body: JSON.stringify(quizeRequst),
+    }).then((res) => res.json()).then((data) => parseMovies(data))
   }
 )
 
@@ -95,10 +102,18 @@ export const quizeSlice = createSlice({
       state.currentPage = action.payload;
     },
     addFilter: (state, action) => {
+      console.log("Addin filter ", action.payload)
       state.quizeRequest.config[action.payload.key] = action.payload.value;
     },
     setDetailsModal: (state, action) => {
       state.detailsModal = action.payload;
+    },
+    updateProgress: (state) => {
+      state.progress = state.progress + 1;
+    },
+    resetProgress: (state, action) => {
+      state.progress = state.progress + 1;
+      state.currentPage = CurrentPage.MOVIES
     }
   },
   extraReducers: (builder) => {
@@ -108,6 +123,34 @@ export const quizeSlice = createSlice({
     })
     builder.addCase(getNextMovie.fulfilled, (state, action) => {
       state.currentState = CurrentState.fulfilled
+      state.progress = state.progress + 1;
+      if (state.progress + 1 === 10) {
+        state.currentPage = CurrentPage.RESULTS;
+        if (state.currentMovies[0]?.title === action.meta.arg) {
+          state.currentMovies[0] = null;
+        } else {
+          state.currentMovies[1] = null;
+        }
+      } else {
+        //Replace the movie that id is in the argument
+        if (state.currentMovies[0]?.title === action.meta.arg) {
+          state.quizeRequest = {
+            ...state.quizeRequest,
+            movies: [...state.quizeRequest.movies, state.currentMovies[0].id]
+          }
+          state.currentMovies[0] = action.payload;
+        } else {
+          if(state.currentMovies[1]) {
+            state.quizeRequest = {
+              ...state.quizeRequest,
+              movies: [...state.quizeRequest.movies, state.currentMovies[1].id]
+            }
+          }
+          state.currentMovies[1] = action.payload;
+        }
+        console.log(action.payload)
+        console.log(state.quizeRequest)
+      }
     })
     builder.addCase(getNextMovie.rejected, (state, action) => {
       state.currentState = CurrentState.error
@@ -119,6 +162,7 @@ export const quizeSlice = createSlice({
     builder.addCase(getFirst.fulfilled, (state, action) => {
       state.currentState = CurrentState.fulfilled
       console.log("Server Response ", action.payload)
+      state.currentMovies = action.payload
     })
     builder.addCase(getFirst.rejected, (state, action) => {
       state.currentState = CurrentState.error
@@ -127,6 +171,6 @@ export const quizeSlice = createSlice({
   }
 })
 
-export const { reset, changePage, addFilter, setDetailsModal } = quizeSlice.actions
+export const { reset, changePage, addFilter, setDetailsModal, updateProgress } = quizeSlice.actions
 
 export default quizeSlice.reducer

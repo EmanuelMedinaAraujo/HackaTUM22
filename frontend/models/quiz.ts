@@ -1,11 +1,11 @@
 export interface QuizRequest {
     config: Filters;
-    movies: Array<ViewedMovies>;
+    movies: Array<number>;
     currentMovieId: string;
 }
 
 export interface Filters {
-    [key : string]: Array<string>;
+    [key : string]: Array<string | boolean> | boolean;
 }
 
 export interface ViewedMovies {
