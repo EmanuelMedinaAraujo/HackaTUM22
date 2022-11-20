@@ -5,7 +5,6 @@ import movies.fixed_filter
 
 # Given a fixed filter and a list of movies determine the best next suggestion
 class RecommendationAlgorithm():
-
     # Retrieve two first suggestions
     @staticmethod
     def getFirstSuggestions(fixedFilter):
@@ -23,9 +22,9 @@ class RecommendationAlgorithm():
             fixedFilter.currentMovie = randomMovie
             return randomMovie
 
+        return validMovies.order_by('?').first()
         # Remove current movie from valid movies        
-        currentMovies = Movie.objects.filter(tmdb= fixedFilter.currentMovie.tmdb).first()
-        validMovies = validMovies.exclude(tmdb = currentMovies.tmdb)
+        validMovies = validMovies.exclude(tmdb = fixedFilter.currentMovie.tmdb)
 
         # Remove swiped movies from valid movies
         for swipedMovie in swipedMovies:

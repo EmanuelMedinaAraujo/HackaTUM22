@@ -54,16 +54,11 @@ export const getNextMovie = createAsyncThunk(
   async (pastMovie: string, thunkApi) => {
     const state: RootState = await thunkApi.getState() as RootState;
     let quizeRequest = state.quizReducer.quizeRequest;
-    return await fetch('http://localhost:8000/next/api', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...quizeRequest,
-        movies: [...quizeRequest.movies, pastMovie]
-      })
-    }).then((res) => res.json()).then((data) => parseMovie(data))
+    let response = await getMovie(quizeRequest);
+    while (state.quizReducer.quizeRequest.movies.includes(response.title) || (response.title === state.quizReducer.currentMovies[0]?.title || response.title === state.quizReducer.currentMovies[1]?.title)) {
+      response = await getMovie(quizeRequest)
+    }
+    return response;
   }
 )
 
@@ -75,15 +70,33 @@ export const getFirst = createAsyncThunk(
     let quizeRequst = state.quizReducer.quizeRequest;
     console.log(state)
     console.log("State ", JSON.stringify(quizeRequst))
-    return await fetch('http://localhost:8000/first/api', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(quizeRequst),
-    }).then((res) => res.json()).then((data) => parseMovies(data))
+    let response = await getMovies(quizeRequst);
+    while (response[0].title === response[1].title) {
+      response =  await getMovies(quizeRequst);
+    }
+    return response;
   }
 )
+
+export async function getMovies(quiz : QuizRequest) {
+  return await fetch('http://localhost:8000/first/api', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(quiz),
+  }).then((res) => res.json()).then((data) => parseMovies(data))
+}
+
+export async function getMovie(quiz : QuizRequest) {
+  return await fetch('http://localhost:8000/next/api', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(quiz),
+  }).then((res) => res.json()).then((data) => parseMovie(data))
+}
 
 //Slice
 export const quizeSlice = createSlice({
@@ -124,7 +137,7 @@ export const quizeSlice = createSlice({
     builder.addCase(getNextMovie.fulfilled, (state, action) => {
       state.currentState = CurrentState.fulfilled
       state.progress = state.progress + 1;
-      if (state.progress + 1 === 10) {
+      if (state.progress + 1 === 5) {
         state.currentPage = CurrentPage.RESULTS;
         if (state.currentMovies[0]?.title === action.meta.arg) {
           state.currentMovies[0] = null;
@@ -136,14 +149,14 @@ export const quizeSlice = createSlice({
         if (state.currentMovies[0]?.title === action.meta.arg) {
           state.quizeRequest = {
             ...state.quizeRequest,
-            movies: [...state.quizeRequest.movies, state.currentMovies[0].id]
+            movies: [...state.quizeRequest.movies, state.currentMovies[0].title]
           }
           state.currentMovies[0] = action.payload;
         } else {
           if(state.currentMovies[1]) {
             state.quizeRequest = {
               ...state.quizeRequest,
-              movies: [...state.quizeRequest.movies, state.currentMovies[1].id]
+              movies: [...state.quizeRequest.movies, state.currentMovies[1].title]
             }
           }
           state.currentMovies[1] = action.payload;

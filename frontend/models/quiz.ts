@@ -1,6 +1,6 @@
 export interface QuizRequest {
     config: Filters;
-    movies: Array<number>;
+    movies: Array<string>;
     currentMovieId: string;
 }
 
