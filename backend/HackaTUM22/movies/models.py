@@ -16,7 +16,6 @@ class Country(models.Model):
 class Genre(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
 
-
 class Series(models.Model):
     otitle = models.CharField(max_length=50, primary_key=True)
 
@@ -51,7 +50,6 @@ class Movie(models.Model):
     posters = models.URLField(max_length=150, blank=True, null=True)
     runtime = models.IntegerField(blank=True, null=True)
     fsk = models.IntegerField(blank=True, null=True)
-
 
 class Version(models.Model):
     internal_id = models.IntegerField(blank=True)

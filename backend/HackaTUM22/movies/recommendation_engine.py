@@ -1,7 +1,7 @@
 from django.db.models import Count
 from movies.models import *
 import random
-import fixed_filter
+import movies.fixed_filter
 
 # Given a fixed filter and a list of movies determine the best next suggestion
 class RecommendationAlgorithm():
@@ -16,23 +16,32 @@ class RecommendationAlgorithm():
     # Determine the best next suggestion
     @staticmethod
     def getNextSuggestion(fixedFilter, swipedMovies):
-        validMovies = RecommendationAlgorithm.queryDatabaseWithFilter(fixedFilter, swipedMovies)
+        #TODO extract movies correctly from config file
+        validMovies = RecommendationAlgorithm.queryDatabaseWithFilter(fixedFilter)
         if(fixedFilter.currentMovie is None):
-            randomMovie = random.choice(validMovies)
+            randomMovie = validMovies.order_by('?').first()
             fixedFilter.currentMovie = randomMovie
             return randomMovie
-        validMovies.remove(fixedFilter.currentMovie)
-        # Remove already swiped Movies
-        for movie in swipedMovies:
-            validMovies.remove(movie)
+
+        # Remove current movie from valid movies        
+        currentMovies = Movie.objects.filter(tmdb= fixedFilter.currentMovie.tmdb).first()
+        validMovies = validMovies.exclude(tmdb = currentMovies.tmdb)
+
+        # Remove swiped movies from valid movies
+        for swipedMovie in swipedMovies:
+            validMovies = validMovies.exclude(tmdb = swipedMovie.tmdb)
+        #return validMovies.order_by('?').first()
 
         # Determine the best recommendation
         validMovies = RecommendationAlgorithm.getBestSuggestionFrom(validMovies, swipedMovies)
-        return validMovies[0]
+        return validMovies.first()
     
     # Get the best suggestion from a given list using left swiped movies
     @staticmethod
     def getBestSuggestionFrom(validMovies, swipedMovies):
+        if(len(swipedMovies) <= 0):
+            return validMovies.order_by('?')
+
         # Count how often each Genre appears in swiped movies list
         result = swipedMovies.values('genres') \
                                 .annotate(genresCount=Count('genres'))\
@@ -82,7 +91,7 @@ class RecommendationAlgorithm():
         validMovies = sorted(validMovies, cmp=lambda movie1, movie2: RecommendationAlgorithm.compareMoviesByGenreActorsCountryAndDirector(movie1, movie2, genres, actors, countries, directors))
 
         # Get the first entry which is the one with the highest match
-        return validMovies[0]
+        return validMovies.first()
 
     # Compare two movies by genre and actor
     @staticmethod
@@ -161,13 +170,16 @@ class RecommendationAlgorithm():
         # Retrieve all movies or series according to the fixed filter
         if fixedFilter.showOnlySerie:
             # Retrieve only the first episode of the first season of each series
-            movies = Movie.objects.filter(serie=True, season = 1, episode = 1)
+            #movies = Movie.objects.filter(serie=True, season = 1, episode = 1)
+            movies = Movie.objects.all()
         else:
             movies = Movie.objects.all()
 
         # Filter by genre
-        if len(fixedFilter.genres) > 0:
+        #if len(fixedFilter.genres) > 0:
+            # Retrieve all movies which have at least one of the selected genres
             movies = movies.filter(genres__name__in=fixedFilter.genres)
+            return movies
         
         # Filter by provider
         validOffers = Offer.filter(movies__name__in=movies)

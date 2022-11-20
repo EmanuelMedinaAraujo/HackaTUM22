@@ -10,7 +10,7 @@ export const defaultFilters : Array<Filters> = [
         lable: 'Genre',
         lableId: 'genres',
         options: [
-                {id:"Abenteu",lable: "Abenteuer"},
+                {id:"Abenteuer",lable: "Abenteuer"},
                 {id:"Action",lable:"Action"},
                 {id:"Animation",lable: "Animation"},
                 {id:"Dokumentation",lable:"Dokumentation"},
