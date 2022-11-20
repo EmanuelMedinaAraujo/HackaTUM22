@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import LandingPage from "../components/LandingPage"
 import MovieQuiz from "../components/MovieQuiz"
 import MovieResult from "../components/MovieResult"
-import { addFilter, changePage, CurrentPage } from "../state/slices/quizSlice"
+import { changePage, CurrentPage } from "../state/slices/quizSlice"
 import { RootState } from "../state/store"
 
 const CompareMovies = dynamic(() => import("../components/CompareMovies"), { ssr: false })

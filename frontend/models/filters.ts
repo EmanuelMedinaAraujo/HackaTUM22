@@ -6,22 +6,22 @@ export interface Filters {
 
 export const defaultFilters : Array<Filters> = [
     {
-        lable: 'Genre',
+        lable: 'genre',
         options: ['Abenteuer', 'Action', 'Animation', 'Dokumentation', 'Drama', 'Erotik', 'Familie', 'Fantasy', 'Filmkunst', 'Horror', 'Kinder & Jugend', 'Komödie', 'Krimi', 'Musik', 'Mystery', 'Reality & TV', 'Romantik', 'Science-Fiction', 'Sonstige', 'Thriller', 'Western'],
         selected: false
     },
     {
-        lable: 'Anbieter',
+        lable: 'anbieter',
         options: ['Netflix', 'Amazon Prime Video', 'Disney+', 'Apple TV+', 'WOW', 'RTL+', 'Joyn', 'Joyn Plus', 'Freevee', 'discovery+', 'MagentaTV', 'Amazon Video', 'iTunes Store', 'Google Play', 'Maxdome'],
         selected: false
     },
     {
-        lable: 'Preis',
+        lable: 'preis',
         options: ["Im Abo", "Kaufen/Leihen", "Kostenlos"],
         selected: false
     },
     {
-        lable: 'Type',
+        lable: 'type',
         options: ['Film', 'Serie'],
         selected: false
     },
